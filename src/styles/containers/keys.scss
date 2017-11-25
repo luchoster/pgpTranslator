@@ -1,0 +1,15 @@
+.keys-container {
+  max-height: 75vh;
+  .generated-key {
+    overflow-y: scroll;
+    max-height: 25vh;
+    &:nth-child(2) {
+      border-top: 1px dotted;
+      padding-top: 30px;
+      margin-top: 20px
+    }
+  }
+  .copy-btns {
+    color: #484848
+  }
+}

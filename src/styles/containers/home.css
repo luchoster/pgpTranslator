@@ -1,0 +1,8 @@
+.home-container {
+  height: calc(100vh - 64px); }
+  .home-container a {
+    text-decoration: none; }
+    .home-container a li {
+      background: #508991; }
+      .home-container a li svg, .home-container a li h3 {
+        color: white; }
