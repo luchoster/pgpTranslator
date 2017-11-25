@@ -9,9 +9,10 @@ import {
   StepContent,
   TextField,
 }                        from 'material-ui'
-import Subheader from 'material-ui/List/ListSubheader'
+import Subheader         from 'material-ui/List/ListSubheader'
 import { notNilOrEmpty } from '../lib/helpers'
-import { Encrypt } from '../actions'
+import { Encrypt }       from '../actions'
+import CopyMessageBtn    from '../components/copyMessageBtn'
 
 class EncryptPage extends React.Component{
   state = {
@@ -145,6 +146,7 @@ class EncryptPage extends React.Component{
             ></StepContent>
           </Step>
         </Stepper>
+        <CopyMessageBtn message={this.props.encrypted} hidden={ R.not(this.state.encryptedSuccess) } />
       </div>
     )
   }

@@ -19,6 +19,7 @@ import {
 import Subheader         from 'material-ui/List/ListSubheader'
 import { Decrypt, Keys }       from '../actions'
 import { notNilOrEmpty } from '../lib/helpers'
+import CopyMessageBtn    from '../components/copyMessageBtn'
 
 class DecryptPage extends React.Component{
   state = {
@@ -75,23 +76,6 @@ class DecryptPage extends React.Component{
     })
   }
 
-  // handleMessage = (e) => {
-  //   if (openpgp.message.readArmored(e.target.value)) {
-  //     let msg = openpgp.message.readArmored(e.target.value)
-  //     this.setState({
-  //       message: msg
-  //     })
-  //   } else {
-  //     alert('nope')
-  //   }
-
-  // }
-
-  handleDecrypt = data => {
-    this.props.decryptMsg(data)
-    this.setState({stepIndex: 2, decryptedSuccess: true})
-  }
-
   clearPrivKey = () => this.setState({privateKeyArmored : ''})
 
   handlePassphraseDialog = () => this.setState({
@@ -118,6 +102,16 @@ class DecryptPage extends React.Component{
           openSnackbar: true
         })
       }
+  }
+
+  handleDecrypt = data => {
+    if(!this.state.message.startsWith('-----BEGIN PGP MESSAGE-----')) {
+      alert('nope')
+    } else {
+      this.props.decryptMsg(data)
+      this.setState({stepIndex: 2, decryptedSuccess: true})
+
+    }
   }
 
   render() {
@@ -259,6 +253,7 @@ class DecryptPage extends React.Component{
             </StepContent>
           </Step>
         </Stepper>
+        <CopyMessageBtn message={this.props.decrypt} hidden={ R.not(this.state.decryptedSuccess) } />
       </div>
     )
   }
@@ -266,7 +261,8 @@ class DecryptPage extends React.Component{
 
 const mapStateToProps = state => ({
   keys: state.keys,
-  decrypt: state.decrypt
+  decrypt: state.decrypt.decrypt_message,
+  decrypt_error: state.decrypt.decrypt_error
 })
 
 const mapDispatchToProps = dispatch => ({
