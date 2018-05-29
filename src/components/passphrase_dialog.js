@@ -6,17 +6,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField
+  TextField,
 } from 'material-ui'
 
 class PassphraseDialog extends React.Component {
   render() {
     const props = this.props
-    return(
+    return (
       <Dialog
         open={props.passphraseDialog}
-        onRequestClose={props.handlePassphraseDialog}
-        >
+        onClose={props.handlePassphraseDialog}
+      >
         <DialogTitle className="text-center">Enter your Passphrase</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -25,7 +25,7 @@ class PassphraseDialog extends React.Component {
           <form onSubmit={props.decryptKey}>
             <TextField
               fullWidth
-              label='Passphrase'
+              label="Passphrase"
               margin="normal"
               multiline={true}
               name="passphrase"
@@ -38,14 +38,14 @@ class PassphraseDialog extends React.Component {
               <Button
                 label="Cancel"
                 color="primary"
-                onTouchTap={props.handlePassphraseDialog}
+                onClick={props.handlePassphraseDialog}
               >
                 Cancel
               </Button>
               <Button
-                type='submit'
+                type="submit"
                 color="primary"
-                onTouchTap={props.handlePassphraseDialog}
+                onClose={props.handlePassphraseDialog}
               >
                 Submit
               </Button>
@@ -53,7 +53,6 @@ class PassphraseDialog extends React.Component {
           </form>
         </DialogContent>
       </Dialog>
-
     )
   }
 }

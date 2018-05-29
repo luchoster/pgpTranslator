@@ -1,6 +1,6 @@
-import * as R       from 'ramda'
-import React        from 'react'
-import { connect }  from 'react-redux'
+import * as R from 'ramda'
+import React from 'react'
+import { connect } from 'react-redux'
 import * as openpgp from 'openpgp'
 import {
   Button,
@@ -9,19 +9,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  ListSubheader,
   Stepper,
   Step,
   StepLabel,
   StepContent,
   Snackbar,
   TextField,
-}                        from 'material-ui'
-import Subheader         from 'material-ui/List/ListSubheader'
-import { Decrypt, Keys }       from '../actions'
+} from '@material-ui/core'
+import { Decrypt, Keys } from '../actions'
 import { notNilOrEmpty } from '../lib/helpers'
-import CopyMessageBtn    from '../components/copyMessageBtn'
+import CopyMessageBtn from '../components/copyMessageBtn'
 
-class DecryptPage extends React.Component{
+class DecryptPage extends React.Component {
   state = {
     openSnackbar: false,
     decryptedSuccess: false,
@@ -36,103 +36,117 @@ class DecryptPage extends React.Component{
 
   componentDidMount() {
     this.props.getSavedKeys()
-    if(this.props.keys.privateKeyArmored)
+    if (this.props.keys.privateKeyArmored)
       this.setState({
-        privateKeyArmored: this.props.keys.privateKeyArmored
+        privateKeyArmored: this.props.keys.privateKeyArmored,
       })
   }
 
   componentDidUpdate(prevProps) {
-    if(!R.equals(prevProps.keys, this.props.keys)) {
+    if (!R.equals(prevProps.keys, this.props.keys)) {
       this.props.getSavedKeys()
-      if(this.props.keys.privateKeyArmored)
+      if (this.props.keys.privateKeyArmored)
         this.setState({
-          privateKeyArmored: this.props.keys.privateKeyArmored
+          privateKeyArmored: this.props.keys.privateKeyArmored,
         })
     }
   }
 
-  handleSteps = (step) => {
+  handleSteps = step => {
     this.setState({
-      stepIndex: step
+      stepIndex: step,
     })
   }
 
   handleNext = () => {
     if (this.state.stepIndex < 2) {
-      this.setState({stepIndex: this.state.stepIndex + 1})
+      this.setState({ stepIndex: this.state.stepIndex + 1 })
     }
   }
 
   handlePrev = () => {
     if (this.state.stepIndex > 0) {
-      this.setState({stepIndex: this.state.stepIndex - 1})
+      this.setState({ stepIndex: this.state.stepIndex - 1 })
     }
   }
 
-  handleInputChanges = (e) => {
+  handleInputChanges = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     })
   }
 
-  clearPrivKey = () => this.setState({privateKeyArmored : ''})
+  clearPrivKey = () => this.setState({ privateKeyArmored: '' })
 
-  handlePassphraseDialog = () => this.setState({
-    passphraseDialog: !this.state.passphraseDialog
-  })
+  handlePassphraseDialog = () =>
+    this.setState({
+      passphraseDialog: !this.state.passphraseDialog,
+    })
 
-  closeSnackbar = () => this.setState({
-    openSnackbar: false
-  })
+  closeSnackbar = () =>
+    this.setState({
+      openSnackbar: false,
+    })
 
-  decryptKey = (e) => {
-      e.preventDefault()
+  decryptKey = async e => {
+    e.preventDefault()
+    let isLegitKey = null
 
-      const privateKey = openpgp.key.readArmored(this.state.privateKeyArmored).keys[0]
-      const isLegitKey = privateKey.decrypt(this.state.passphrase)
+    const privateKey = openpgp.key.readArmored(this.state.privateKeyArmored)
+      .keys[0]
+    try {
+      await privateKey.decrypt(this.state.passphrase)
+      isLegitKey = true
+    } catch (e) {
+      isLegitKey = false
+    }
 
-      if (isLegitKey) {
-        this.setState({
-          stepIndex: 1,
-          privateKey: privateKey
-        })
-      } else {
-        this.setState({
-          openSnackbar: true
-        })
-      }
+    if (isLegitKey) {
+      this.setState({
+        stepIndex: 1,
+        privateKey: privateKey,
+      })
+    } else {
+      this.setState({
+        openSnackbar: true,
+      })
+    }
   }
 
   handleDecrypt = data => {
-    if(!this.state.message.startsWith('-----BEGIN PGP MESSAGE-----')) {
-      alert('nope')
+    if (!this.state.message.startsWith('-----BEGIN PGP MESSAGE-----')) {
+      alert("That's not a valid PGP Message. Try again")
     } else {
       this.props.decryptMsg(data)
-      this.setState({stepIndex: 2, decryptedSuccess: true})
-
+      this.setState({ stepIndex: 2, decryptedSuccess: true })
     }
   }
 
   render() {
-    const {stepIndex} = this.state;
+    const { stepIndex } = this.state
     const data = {
       privateKey: this.state.privateKey,
-      message: this.state.message
+      message: this.state.message,
     }
-    return(
+    return (
       <div>
         <Snackbar
           open={this.state.openSnackbar}
-          message="Wrong Passphrase"
-          autoHideDuration="4000"
-          onRequestClose={this.closeSnackbar}
+          message={<span id="message-id">Wrong Passphrase</span>}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          autoHideDuration={4000}
+          onClose={this.closeSnackbar}
         />
         <Dialog
           open={this.state.passphraseDialog}
-          onRequestClose={this.handlePassphraseDialog}
-          >
-          <DialogTitle className="text-center">Enter your Passphrase</DialogTitle>
+          onClose={this.handlePassphraseDialog}
+        >
+          <DialogTitle className="text-center">
+            Enter your Passphrase
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Enter the passphrase of your Private Key
@@ -140,7 +154,7 @@ class DecryptPage extends React.Component{
             <form onSubmit={this.decryptKey}>
               <TextField
                 fullWidth
-                label='Passphrase'
+                label="Passphrase"
                 margin="normal"
                 multiline={true}
                 name="passphrase"
@@ -153,14 +167,14 @@ class DecryptPage extends React.Component{
                 <Button
                   label="Cancel"
                   color="primary"
-                  onTouchTap={this.handlePassphraseDialog}
+                  onClick={this.handlePassphraseDialog}
                 >
                   Cancel
                 </Button>
                 <Button
-                  type='submit'
+                  type="submit"
                   color="primary"
-                  onTouchTap={this.handlePassphraseDialog}
+                  onClick={this.handlePassphraseDialog}
                 >
                   Submit
                 </Button>
@@ -168,16 +182,16 @@ class DecryptPage extends React.Component{
             </form>
           </DialogContent>
         </Dialog>
-        <Subheader className="page-title">Decrypt Messages</Subheader>
+        <ListSubheader className="page-title">Decrypt Messages</ListSubheader>
         <Stepper orientation="vertical" activeStep={stepIndex}>
           <Step>
-            <StepLabel onTouchTap={() => this.handleSteps(0)}>
+            <StepLabel onClick={() => this.handleSteps(0)}>
               Enter the Private Key to decrypt
             </StepLabel>
             <StepContent>
               <TextField
-                id='privateKeyArmored'
-                name='privateKeyArmored'
+                id="privateKeyArmored"
+                name="privateKeyArmored"
                 label="Private Key"
                 fullWidth
                 multiline
@@ -189,29 +203,36 @@ class DecryptPage extends React.Component{
               />
               <Button
                 className="btn col-6"
-                onTouchTap={this.clearPrivKey}
-                raised color="accent"
-                >
+                onClick={this.clearPrivKey}
+                variant="raised"
+              >
                 Clear
               </Button>
               <Button
                 className="btn col-6"
-                onTouchTap={this.handlePassphraseDialog}
-                raised color="primary"
-                disabled={ R.isEmpty(this.state.privateKeyArmored) ? true : false }
-                >
+                onClick={this.handlePassphraseDialog}
+                variant="raised"
+                color="primary"
+                disabled={
+                  R.isEmpty(this.state.privateKeyArmored) ? true : false
+                }
+              >
                 Next
               </Button>
             </StepContent>
           </Step>
           <Step>
-            <StepLabel onTouchTap={ () => notNilOrEmpty(this.state.privateKey) && this.handleSteps(1) }>
+            <StepLabel
+              onClick={() =>
+                notNilOrEmpty(this.state.privateKey) && this.handleSteps(1)
+              }
+            >
               Message you want to Decrypt
             </StepLabel>
             <StepContent>
               <TextField
-                id='message'
-                name='message'
+                id="message"
+                name="message"
                 label="Message"
                 fullWidth
                 multiline
@@ -221,39 +242,44 @@ class DecryptPage extends React.Component{
                 required
                 margin="normal"
               />
-              <Button
-                onTouchTap={this.handlePrev}
-              >
-                Back
-              </Button>
+              <Button onClick={this.handlePrev}>Back</Button>
               <Button
                 className="btn"
-                raised
+                variant="raised"
                 color="primary"
-                disabled={ R.isEmpty(this.state.message) ? true : false }
-                onTouchTap={() => this.handleDecrypt(data)}
+                disabled={R.isEmpty(this.state.message) ? true : false}
+                onClick={() => this.handleDecrypt(data)}
               >
                 Decrypt
               </Button>
             </StepContent>
           </Step>
           <Step>
-            <StepLabel onTouchTap={ () => notNilOrEmpty(this.state.message) && this.handleSteps(2) }>
+            <StepLabel
+              onClick={() =>
+                notNilOrEmpty(this.state.message) && this.handleSteps(2)
+              }
+            >
               Decrypted Message
             </StepLabel>
             <StepContent>
               <TextField
-                id='encryptedMsg'
+                id="encryptedMsg"
                 disabled
                 multiline
                 rowsMax={8}
-                value={notNilOrEmpty(this.props.decrypt) ? this.props.decrypt : ''}
+                value={
+                  notNilOrEmpty(this.props.decrypt) ? this.props.decrypt : ''
+                }
                 fullWidth
               />
             </StepContent>
           </Step>
         </Stepper>
-        <CopyMessageBtn message={this.props.decrypt} hidden={ R.not(this.state.decryptedSuccess) } />
+        <CopyMessageBtn
+          message={this.props.decrypt}
+          hidden={R.not(this.state.decryptedSuccess)}
+        />
       </div>
     )
   }
@@ -262,13 +288,12 @@ class DecryptPage extends React.Component{
 const mapStateToProps = state => ({
   keys: state.keys,
   decrypt: state.decrypt.decrypt_message,
-  decrypt_error: state.decrypt.decrypt_error
+  decrypt_error: state.decrypt.decrypt_error,
 })
 
 const mapDispatchToProps = dispatch => ({
   getSavedKeys: () => dispatch(Keys.savedKeys()),
-  decryptMsg: (data) => dispatch(Decrypt._decryptMessage(data))
+  decryptMsg: data => dispatch(Decrypt._decryptMessage(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecryptPage)
-

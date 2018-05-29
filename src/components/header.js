@@ -1,10 +1,9 @@
-import React                             from 'react'
-import { Link }                          from 'react-router-dom'
-import MenuIcon                          from 'material-ui-icons/Menu'
-import HomeIcon                          from 'material-ui-icons/Home'
-import { LockOutline, LockOpen, VpnKey, Security } from 'material-ui-icons/'
-import Subheader                         from 'material-ui/List/ListSubheader'
-import KeyGen                            from '../components/keygen'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import MenuIcon from '@material-ui/icons/Menu'
+import HomeIcon from '@material-ui/icons/Home'
+import { LockOutline, LockOpen, VpnKey, Security } from '@material-ui/icons'
+import KeyGen from '../components/keygen'
 import {
   AppBar,
   Drawer,
@@ -13,33 +12,28 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Toolbar,
   Typography,
-  Button
-} from 'material-ui'
+  Button,
+} from '@material-ui/core'
 
 class Header extends React.Component {
   state = {
     keyDialog: false,
-    drawer: false
+    drawer: false,
   }
 
-  openDrawer = (e) => {
+  toggleDrawer = e => {
     e.preventDefault()
     this.setState({
-      drawer: true
+      drawer: !this.state.drawer,
     })
   }
 
-  closeDrawer = () => {
-    this.setState({
-      drawer: false
-    })
-  }
-
-  openKeyDialog = (e) => {
+  openKeyDialog = e => {
     e.preventDefault()
-    this.setState({ keyDialog: true })
+    this.setState({ keyDialog: true, drawer: false })
   }
 
   closeKeyDialog = () => {
@@ -47,72 +41,83 @@ class Header extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <AppBar position="static" className="app-bar">
           <Toolbar>
-            <IconButton onTouchTap={this.openDrawer} color="contrast" aria-label="Menu">
-              <MenuIcon />
+            <IconButton aria-label="Menu">
+              <MenuIcon onClick={this.toggleDrawer} />
             </IconButton>
-            <Typography type="title" color="inherit" style={{flex: 1}}>
+            <Typography type="title" style={{ flex: 1 }}>
               PGP Translator
             </Typography>
-            <Button onTouchTap={ this.openKeyDialog } color="contrast">KeyGen</Button>
+            <Button variant="raised" onClick={this.openKeyDialog}>
+              KeyGen
+            </Button>
             <KeyGen
-              keyNames={(options) => this.props.generateKeys(options)}
+              keyNames={options => this.props.generateKeys(options)}
               open={this.state.keyDialog}
               close={this.closeKeyDialog}
             />
           </Toolbar>
         </AppBar>
         <Drawer
+          anchor="left"
           open={this.state.drawer}
-          onRequestClose={this.closeDrawer}
+          onClose={this.toggleDrawer}
         >
-          <Subheader>Main Menu</Subheader>
+          <ListSubheader component="div">Main Menu</ListSubheader>
           <Divider />
-            <ListItem button onTouchTap={this.openKeyDialog}>
-              <ListItemIcon>
-                <VpnKey />
-              </ListItemIcon>
-              <ListItemText primary="Generate New Keys" />
-            </ListItem>
+          <ListItem button onClick={this.openKeyDialog}>
+            <ListItemIcon>
+              <VpnKey />
+            </ListItemIcon>
+            <ListItemText primary="Generate New Keys" />
+          </ListItem>
           <Divider />
-          <Link to='/' onClick={this.closeDrawer}>
-            <ListItem button>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItem>
-          </Link>
+          <div onClick={this.toggleDrawer}>
+            <Link to="/">
+              <ListItem button>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Link>
+          </div>
           <Divider />
-          <Link to='/encrypt' onClick={this.closeDrawer}>
-            <ListItem button>
-              <ListItemIcon>
-                <LockOutline />
-              </ListItemIcon>
-              <ListItemText primary="Encrypt" />
-            </ListItem>
-          </Link>
+          <div onClick={this.toggleDrawer}>
+            <Link to="/encrypt">
+              <ListItem button>
+                <ListItemIcon>
+                  <LockOutline />
+                </ListItemIcon>
+                <ListItemText primary="Encrypt" />
+              </ListItem>
+            </Link>
+          </div>
           <Divider />
-          <Link to='/decrypt' onClick={this.closeDrawer}>
-            <ListItem button>
-              <ListItemIcon>
-                <LockOpen />
-              </ListItemIcon>
-              <ListItemText primary="Decrypt" />
-            </ListItem>
-          </Link>
+          <div onClick={this.toggleDrawer}>
+            <Link to="/decrypt">
+              <ListItem button>
+                <ListItemIcon>
+                  <LockOpen />
+                </ListItemIcon>
+                <ListItemText primary="Decrypt" />
+              </ListItem>
+            </Link>
+          </div>
           <Divider />
-          <Link to='/keys' onClick={this.closeDrawer}>
-            <ListItem button>
-              <ListItemIcon>
-                <Security />
-              </ListItemIcon>
-              <ListItemText primary="Display Keys" />
-            </ListItem>
-          </Link>
+          <div onClick={this.toggleDrawer}>
+            <Link to="/keys">
+              <ListItem button>
+                <ListItemIcon>
+                  <Security />
+                </ListItemIcon>
+                <ListItemText primary="Display Keys" />
+              </ListItem>
+            </Link>
+          </div>
           <Divider />
         </Drawer>
       </div>

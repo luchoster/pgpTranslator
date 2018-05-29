@@ -1,48 +1,31 @@
-import React      from 'react'
-import { Link }   from 'react-router-dom'
-import {
-  LockOpen,
-  LockOutline,
-  VpnKey
-} from 'material-ui-icons'
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from 'material-ui'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { LockOpen, LockOutline, VpnKey } from '@material-ui/icons'
+import { Button } from '@material-ui/core'
 
 class Home extends React.Component {
   render() {
-    return(
+    return (
       <div className="row justify-content-center home-container">
         <section className="align-self-center">
-          <List>
-            <Link to='/encrypt' className="col-sm-12">
-              <ListItem button>
-                <ListItemIcon>
-                  <LockOutline />
-                </ListItemIcon>
-                <ListItemText primary="Encrypt Message" />
-              </ListItem>
-            </Link>
-            <Link to='/decrypt' className="col-sm-12">
-              <ListItem button>
-                <ListItemIcon>
-                  <LockOpen />
-                </ListItemIcon>
-                <ListItemText primary="Decrypt Message" />
-              </ListItem>
-            </Link>
-            <Link to='/keys' className="col-sm-12">
-              <ListItem button>
-                <ListItemIcon>
-                  <VpnKey />
-                </ListItemIcon>
-                <ListItemText primary="Saved Keys" />
-              </ListItem>
-            </Link>
-          </List>
+          <Link to="/encrypt">
+            <Button variant="raised" className="col-sm-10 btn--home">
+              <LockOutline />
+              Encrypt Message
+            </Button>
+          </Link>
+          <Link to="/decrypt">
+            <Button variant="raised" className="col-sm-10 btn--home">
+              <LockOpen />
+              Decrypt Message
+            </Button>
+          </Link>
+          <Link to="/keys">
+            <Button variant="raised" className="col-sm-10 btn--home">
+              <VpnKey />
+              Saved Keys
+            </Button>
+          </Link>
         </section>
       </div>
     )
