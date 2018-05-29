@@ -16,6 +16,7 @@ import {
   Toolbar,
   Typography,
   Button,
+  SwipeableDrawer,
 } from '@material-ui/core'
 
 class Header extends React.Component {
@@ -25,7 +26,6 @@ class Header extends React.Component {
   }
 
   toggleDrawer = e => {
-    e.preventDefault()
     this.setState({
       drawer: !this.state.drawer,
     })
@@ -61,10 +61,11 @@ class Header extends React.Component {
             />
           </Toolbar>
         </AppBar>
-        <Drawer
+        <SwipeableDrawer
           anchor="left"
           open={this.state.drawer}
           onClose={this.toggleDrawer}
+          onOpen={this.toggleDrawer}
         >
           <ListSubheader component="div">Main Menu</ListSubheader>
           <Divider />
@@ -119,7 +120,7 @@ class Header extends React.Component {
             </Link>
           </div>
           <Divider />
-        </Drawer>
+        </SwipeableDrawer>
       </div>
     )
   }
