@@ -30,7 +30,11 @@ class KeyGen extends React.Component {
   }
 
   generateKeysAndRedirect = options => {
-    this.props.history.push('/keys')
+    const location = {
+      pathname: '/keys',
+      state: { generatingKeys: true },
+    }
+    this.props.history.push(location)
     this.props.keyNames(options)
   }
 

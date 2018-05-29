@@ -45,6 +45,7 @@ class PassphraseDialog extends React.Component {
               <Button
                 type="submit"
                 color="primary"
+                variant="raised"
                 onClose={props.handlePassphraseDialog}
               >
                 Submit

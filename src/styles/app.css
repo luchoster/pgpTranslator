@@ -1,5 +1,6 @@
 .app-bar {
-  background-color: #508991 !important; }
+  background-color: #508991 !important;
+  min-height: 56px !important; }
 
 .center-block {
   margin-left: auto !important;

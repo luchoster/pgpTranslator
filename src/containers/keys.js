@@ -59,9 +59,16 @@ class SavedKeys extends React.Component {
       publicKeyArmored: '',
     },
     added: false,
+    generatingKeys: notNilOrEmpty(this.props.location.state)
+      ? this.props.location.state.generatingKeys
+      : false,
   }
 
   componentDidUpdate(prevProps) {
+    if (!R.equals(prevProps.location.state, this.props.location.state))
+      this.setState({
+        generatingKeys: this.props.location.state.generatingKeys,
+      })
     if (!R.equals(prevProps.keys, this.props.keys)) this._loadKeys()
   }
 
@@ -121,6 +128,14 @@ class SavedKeys extends React.Component {
             keys={this.props.keys}
             addKeys={() => this._addKeys(this.props.keys)}
           />
+        ) : this.state.generatingKeys ? (
+          <div className="row align-items-center full-height justify-content-center">
+            <Paper className="padding20">
+              <h3 className="text-center">
+                Please wait while we generate your new keys...
+              </h3>
+            </Paper>
+          </div>
         ) : (
           <div className="row align-items-center full-height justify-content-center">
             <Paper className="padding20">
