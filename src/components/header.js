@@ -6,7 +6,6 @@ import { LockOutline, LockOpen, VpnKey, Security } from '@material-ui/icons'
 import KeyGen from '../components/keygen'
 import {
   AppBar,
-  Drawer,
   Divider,
   IconButton,
   ListItem,
