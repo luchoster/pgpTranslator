@@ -37,4 +37,7 @@ const mapDispatchToProps = dispatch => ({
   generateKeys: options => dispatch(Keys.keyGen(options)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

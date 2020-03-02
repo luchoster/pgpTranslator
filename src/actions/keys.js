@@ -17,11 +17,6 @@ const savedKeys = () => dispatch =>
     dispatch({ type: TYPE.load_saved_keys, payload: keygen })
   })
 
-const removeKeys = () => dispatch =>
-  getKeys().then(keygen => {
-    dispatch({ type: TYPE.load_saved_keys, payload: '' })
-  })
-
 export default {
   TYPE,
   keyGen,
