@@ -34,6 +34,7 @@ class KeyGen extends React.Component {
       pathname: '/keys',
       state: { generatingKeys: true },
     }
+
     this.props.history.push(location)
     this.props.keyNames(options)
   }

@@ -92,8 +92,10 @@ class DecryptPage extends React.Component {
     e.preventDefault()
     let isLegitKey = null
 
-    const privateKey = openpgp.key.readArmored(this.state.privateKeyArmored)
-      .keys[0]
+    const privateKey = (await openpgp.key.readArmored(
+      this.state.privateKeyArmored
+    )).keys[0]
+
     try {
       await privateKey.decrypt(this.state.passphrase)
       isLegitKey = true
@@ -296,4 +298,7 @@ const mapDispatchToProps = dispatch => ({
   decryptMsg: data => dispatch(Decrypt._decryptMessage(data)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DecryptPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DecryptPage)

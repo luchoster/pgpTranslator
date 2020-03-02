@@ -1,11 +1,16 @@
-.keys-container {
-  max-height: 75vh; }
-  .keys-container .generated-key {
-    overflow-y: scroll;
-    max-height: 25vh; }
-    .keys-container .generated-key:nth-child(2) {
-      border-top: 1px dotted;
-      padding-top: 30px;
-      margin-top: 20px; }
-  .keys-container .copy-btns {
-    color: #484848; }
+.keys-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .keys-wrapper .keys-container {
+    max-height: 75vh;
+    max-width: 100vw; }
+    .keys-wrapper .keys-container .generated-key {
+      overflow-y: scroll;
+      max-height: 25vh; }
+      .keys-wrapper .keys-container .generated-key:nth-child(2) {
+        border-top: 1px dotted;
+        padding-top: 30px;
+        margin-top: 20px; }
+    .keys-wrapper .keys-container .copy-btns {
+      color: #484848; }

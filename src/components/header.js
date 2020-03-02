@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu'
 import HomeIcon from '@material-ui/icons/Home'
-import { LockOutline, LockOpen, VpnKey, Security } from '@material-ui/icons'
+import { LockOutlined, LockOpen, VpnKey, Security } from '@material-ui/icons'
 import KeyGen from '../components/keygen'
 import {
   AppBar,
@@ -50,7 +50,11 @@ class Header extends React.Component {
             <Typography type="title" style={{ flex: 1 }}>
               PGP Translator
             </Typography>
-            <Button variant="raised" onClick={this.openKeyDialog}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={this.openKeyDialog}
+            >
               KeyGen
             </Button>
             <KeyGen
@@ -90,7 +94,7 @@ class Header extends React.Component {
             <Link to="/encrypt">
               <ListItem button>
                 <ListItemIcon>
-                  <LockOutline />
+                  <LockOutlined />
                 </ListItemIcon>
                 <ListItemText primary="Encrypt" />
               </ListItem>
@@ -109,7 +113,12 @@ class Header extends React.Component {
           </div>
           <Divider />
           <div onClick={this.toggleDrawer}>
-            <Link to="/keys">
+            <Link
+              to={{
+                pathname: '/keys',
+                state: { generatingKeys: false },
+              }}
+            >
               <ListItem button>
                 <ListItemIcon>
                   <Security />

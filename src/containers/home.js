@@ -1,28 +1,40 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { LockOpen, LockOutline, VpnKey } from '@material-ui/icons'
+import { LockOpen, LockOutlined, VpnKey } from '@material-ui/icons'
 import { Button } from '@material-ui/core'
 
 class Home extends React.Component {
   render() {
     return (
       <div className="row justify-content-center home-container">
-        <section className="align-self-center">
+        <section className="align-self-center flex-column d-flex align-items-center">
           <Link to="/encrypt">
-            <Button variant="raised" className="col-sm-10 btn--home">
-              <LockOutline />
+            <Button
+              variant="contained"
+              size="large"
+              className="btn--home"
+              startIcon={<LockOutlined />}
+            >
               Encrypt Message
             </Button>
           </Link>
           <Link to="/decrypt">
-            <Button variant="raised" className="col-sm-10 btn--home">
-              <LockOpen />
+            <Button
+              variant="contained"
+              size="large"
+              className="btn--home"
+              startIcon={<LockOpen />}
+            >
               Decrypt Message
             </Button>
           </Link>
           <Link to="/keys">
-            <Button variant="raised" className="col-sm-10 btn--home">
-              <VpnKey />
+            <Button
+              variant="contained"
+              size="large"
+              className="btn--home"
+              startIcon={<VpnKey />}
+            >
               Saved Keys
             </Button>
           </Link>
